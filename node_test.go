@@ -111,7 +111,7 @@ func TestRedisDo(t *testing.T) {
     if err != nil {
 	t.Errorf("GET error: %s\n", err.Error())
     }
-    if _, ok := reply.(redisError); !ok {
+    if _, ok := reply.(RedisError); !ok {
 	t.Errorf("unexpected value %v\n", reply)
     }
 
@@ -119,7 +119,7 @@ func TestRedisDo(t *testing.T) {
     if err != nil {
 	t.Errorf("GET error: %s\n", err.Error())
     }
-    if _, ok := reply.(redisError); !ok {
+    if _, ok := reply.(RedisError); !ok {
 	t.Errorf("unexpected value %v\n", reply)
     }
 

@@ -50,7 +50,7 @@ func Int(reply interface{}, err error) (int, error) {
 	return int(n), err
     case nil:
 	return 0, ErrNil
-    case redisError:
+    case RedisError:
 	return 0, reply
     }
     return 0, fmt.Errorf("unexpected type %T for Int", reply)
@@ -77,7 +77,7 @@ func Int64(reply interface{}, err error) (int64, error) {
 	return n, err
     case nil:
 	return 0, ErrNil
-    case redisError:
+    case RedisError:
 	return 0, reply
     }
     return 0, fmt.Errorf("unexpected type %T for Int64", reply)
@@ -101,7 +101,7 @@ func Float64(reply interface{}, err error) (float64, error) {
 	return n, err
     case nil:
 	return 0, ErrNil
-    case redisError:
+    case RedisError:
 	return 0, reply
     }
     return 0, fmt.Errorf("unexpected type %T for Float64", reply)
@@ -127,7 +127,7 @@ func String(reply interface{}, err error) (string, error) {
 	return reply, nil
     case nil:
 	return "", ErrNil
-    case redisError:
+    case RedisError:
 	return "", reply
     }
     return "", fmt.Errorf("unexpected type %T for String", reply)
@@ -153,7 +153,7 @@ func Bytes(reply interface{}, err error) ([]byte, error) {
 	return []byte(reply), nil
     case nil:
 	return nil, ErrNil
-    case redisError:
+    case RedisError:
 	return nil, reply
     }
     return nil, fmt.Errorf("unexpected type %T for Bytes", reply)
@@ -179,7 +179,7 @@ func Bool(reply interface{}, err error) (bool, error) {
 	return strconv.ParseBool(string(reply))
     case nil:
 	return false, ErrNil
-    case redisError:
+    case RedisError:
 	return false, reply
     }
     return false, fmt.Errorf("unexpected type %T for Bool", reply)
@@ -202,7 +202,7 @@ func Values(reply interface{}, err error) ([]interface{}, error) {
 	return reply, nil
     case nil:
 	return nil, ErrNil
-    case redisError:
+    case RedisError:
 	return nil, reply
     }
     return nil, fmt.Errorf("unexpected type %T for Values", reply)
@@ -468,7 +468,7 @@ func convertAssign(d interface{}, s interface{}) (err error) {
 		err = convertAssignValues(d.Elem(), s)
 	    }
 	}
-    case redisError:
+    case RedisError:
 	err = s
     default:
 	err = cannotConvert(reflect.ValueOf(d), s)

@@ -138,9 +138,9 @@ func (cluster *Cluster) Do(cmd string, args ...interface{}) (interface{}, error)
     case kRespOK, kRespError:
 	return reply, nil
     case kRespMove:
-	return cluster.handleMove(node, reply.(redisError).Error(), cmd, args)
+	return cluster.handleMove(node, reply.(RedisError).Error(), cmd, args)
     case kRespAsk:
-	return cluster.handleAsk(node, reply.(redisError).Error(), cmd, args)
+	return cluster.handleAsk(node, reply.(RedisError).Error(), cmd, args)
     case kRespConnTimeout:
 	return cluster.handleConnTimeout(node, cmd, args)
     }
@@ -237,7 +237,7 @@ func (cluster *Cluster) handleConnTimeout(node *redisNode, cmd string, args []in
 	return nil, fmt.Errorf("handleConnTimeout: %v", err)
     }
 
-    if _, ok := reply.(redisError); !ok {
+    if _, ok := reply.(RedisError); !ok {
 	// we happen to choose the right node, which means 
 	// that cluster has changed, so inform update routine.
 	cluster.inform(randomNode)
@@ -245,7 +245,7 @@ func (cluster *Cluster) handleConnTimeout(node *redisNode, cmd string, args []in
     }
 
     // ignore replies other than MOVED
-    errMsg := reply.(redisError).Error()
+    errMsg := reply.(RedisError).Error()
     if len(errMsg) < 5 || string(errMsg[:5]) != "MOVED" {
 	return reply, nil
     }
@@ -289,11 +289,11 @@ const (
 )
 
 func checkReply(reply interface{}) int {
-    if _, ok := reply.(redisError); !ok {
+    if _, ok := reply.(RedisError); !ok {
 	return kRespOK
     }
 
-    errMsg := reply.(redisError).Error()
+    errMsg := reply.(RedisError).Error()
 
     if len(errMsg) >= 3 && string(errMsg[:3]) == "ASK" {
 	return kRespAsk

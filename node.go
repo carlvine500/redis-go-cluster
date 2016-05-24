@@ -201,7 +201,7 @@ func (conn *redisConn) receive() (interface{}, error) {
 func (node *redisNode) do(cmd string, args ...interface{}) (interface{}, error) {
     conn, err := node.getConn()
     if err != nil {
-	return redisError("ECONNTIMEOUT"), nil
+	return RedisError("ECONNTIMEOUT"), nil
     }
 
     if err = conn.send(cmd, args...); err != nil {
@@ -388,8 +388,8 @@ var (
     pongReply interface{} = "PONG"
 )
 
-type redisError string
-func (err redisError) Error() string { return string(err) }
+type RedisError string
+func (err RedisError) Error() string { return string(err) }
 
 func (conn *redisConn) readReply() (interface{}, error) {
     line, err := conn.readLine()
@@ -413,7 +413,7 @@ func (conn *redisConn) readReply() (interface{}, error) {
 	    return string(line[1:]), nil
 	}
     case '-':
-	return redisError(string(line[1:])), nil
+	return RedisError(string(line[1:])), nil
     case ':':
 	return parseInt(line[1:])
     case '$':
