@@ -86,7 +86,8 @@ func NewCluster(options *Options) (*Cluster, error) {
 
 	err := cluster.update(node)
 	if err != nil {
-	    continue
+		log.Printf("error handleUpdate:%s %v\n", node.address, err)
+		continue
 	} else {
 	    go cluster.handleUpdate()
 	    return cluster, nil
@@ -338,7 +339,7 @@ func (cluster *Cluster) update(node *redisNode) error {
 	}
 
 	t, err := Values(m[2], err)
-	if err != nil || len(t) != 2 {
+	if err != nil || len(t) < 2 {
 	    return errFormat
 	}
 
