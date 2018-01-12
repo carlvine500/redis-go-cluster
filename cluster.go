@@ -123,7 +123,12 @@ func (cluster *Cluster) Do(cmd string, args ...interface{}) (interface{}, error)
 	return cluster.multiGet(cmd, args...)
     }
 
-    node, err := cluster.getNodeByKey(args[0])
+	key := args[0]
+	// EVAL script numkeys key [key ...] arg [arg ...]
+	if cmd == "EVAL" {
+		key = args[2]
+	}
+	node, err := cluster.getNodeByKey(key)
     if err != nil {
 	return nil, fmt.Errorf("Do: %v", err)
     }
